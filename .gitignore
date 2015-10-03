@@ -25,4 +25,5 @@ build/Release
 # Dependency directory
 node_modules
 
+# Development configuration
 config/development.json
