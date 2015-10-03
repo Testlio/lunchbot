@@ -1,0 +1,10 @@
+{
+    "slack": {
+        "api": "BOT_SLACK_API_KEY",
+        "name": "BOT_SLACK_NAME"
+    },
+    "facebook": {
+        "appID": "BOT_FB_APP_ID",
+        "secret": "BOT_FB_APP_SECRET"
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "slack": {
+        "api": "default_api_key",
+        "name": "LunchBot"
+    },
+    "facebook": {
+        "appID": "default_app_id",
+        "secret": "default_secret"
+    }
+}
