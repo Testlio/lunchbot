@@ -56,7 +56,7 @@ function basicPriceParsing(post) {
 
     var result = messages.join('. ');
     if (result.length > 0) {
-        result += ' - <https://facebook.com/' + post.id + '|allikas>';
+        result += ' - _<https://facebook.com/' + post.id + '|Source>_';
     }
 
     return result;
@@ -77,6 +77,9 @@ const apelsin = new FacebookSource('tangerine', 'Apelsini Raudtee', 'apelsinirau
 
 // F-Hoone
 const fhoone = new FacebookSource('house', 'F-Hoone', 'Fhoone', {parser: basicPriceParsing});
+
+// Kukeke, occassionally has an offer posted
+const kukeke = new FacebookSource('rooster', 'Kukeke', 'kukekene', {parser: basicPriceParsing});
 
 // Trühvel, special because only posts once a week (on Mondays)
 const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {parser: function(post, context) {
@@ -102,7 +105,7 @@ const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {pa
             });
 
             if (chunk[0] == currentDay) {
-                return chunk.slice(1).join('. ') + ' - <https://facebook.com/' + post.id + '|allikas>';
+                return chunk.slice(1).join('. ') + ' - _<https://facebook.com/' + post.id + '|Source>_';
             }
 
             startIdx = i;
@@ -120,5 +123,5 @@ const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {pa
 }
 });
 
-bot.services = [latabla, kpk, apelsin, fhoone, truhvel];
+bot.services = [latabla, kpk, apelsin, fhoone, truhvel, kukeke];
 bot.run();
