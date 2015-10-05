@@ -126,5 +126,5 @@ const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {pa
 }
 });
 
-bot.services = [latabla, kpk, apelsin, fhoone, truhvel, kukeke];
+bot.services = [latabla, kpk, apelsin, fhoone, truhvel, kukeke, allen];
 bot.run();
