@@ -81,6 +81,9 @@ const fhoone = new FacebookSource('house', 'F-Hoone', 'Fhoone', {parser: basicPr
 // Kukeke, occassionally has an offer posted
 const kukeke = new FacebookSource('rooster', 'Kukeke', 'kukekene', {parser: basicPriceParsing});
 
+// Foody Allen, sometimes posts
+const allen = new FacebookSource('boy', 'Foody Allen', 'foodyallenrestoran', {parser: basicPriceParsing});
+
 // Trühvel, special because only posts once a week (on Mondays)
 const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {parser: function(post, context) {
     var lines = post.message.split('\n').map(function(l) {
@@ -100,7 +103,7 @@ const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {pa
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
         if (boundary.indexOf(line) != -1 || i == lines.length - 1) {
-            var chunk = lines.slice(startIdx, i-1).filter(function(e) {
+            var chunk = lines.slice(startIdx, i).filter(function(e) {
                 return e.length > 0;
             });
 
