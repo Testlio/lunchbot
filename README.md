@@ -16,6 +16,10 @@ BOT_SLACK_API_KEY={your_slack_api_key_here} BOT_FB_APP_ID={your_fb_app_id_here} 
 
 Alternatively, you can set up a free [Heroku](http://heroku.com) app, defining the variables there and letting the specified Procfile do the rest.
 
+## Using
+
+Once LunchBot has been added to a channel, just ask her about lunch and she'll reply back with a bunch of offers that she managed to scrape. Current keywords that will trigger the search are "offer", "lunch" and "menu". Keywords are only looked for in messages mentioning lunchbot.
+
 ## Architecture
 
 The app consists of two main components: the bot and the sources of information. Currently, the app simply creates the bot and defines a few sources for restaurants in Tallinn. The code should be sufficiently simple to understand and modify, most importantly, `FacebookSource`, the representation of a FB page of interest should be looked at, as well how the predefined locations are handled in `index.js`.
