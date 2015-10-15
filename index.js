@@ -21,7 +21,7 @@ var bot = new LunchBot({
 // Helpers for source parsing
 //
 var tokenizer = new Tokenizer('Chuck');
-var priceRegex = /((?:€\d+(?:\.\d{2})?)|(?:\d+(?:\.\d{2})?€))/;
+var priceRegex = /((?:€\d+(?:\.\d{2})?)|(?:\d+\.\d{2})|(?:\d+(?:\.\d{2})?€))/;
 
 function capitalize(s) {
     // returns the first letter capitalized + the string from index 1 and out aka. the rest of the string
