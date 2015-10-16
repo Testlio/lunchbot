@@ -51,7 +51,7 @@ function basicPriceParsing(post) {
         });
 
         if (sentences.length > 0) {
-            messages.push(sentences.join(' '));
+            messages.push(tokenizer.getSentences().join(' '));
         }
     }
 
