@@ -4,6 +4,7 @@ var LunchBot = require('./lib/lunchbot.js');
 var config = require('config');
 var FacebookSource = require('./lib/sources/facebook.js');
 var Tokenizer = require('sentence-tokenizer');
+var Promise = require('bluebird');
 
 var token = config.get('slack.api');
 var name = config.get('slack.name');
@@ -21,7 +22,7 @@ var bot = new LunchBot({
 // Helpers for source parsing
 //
 var tokenizer = new Tokenizer('Chuck');
-var priceRegex = /((?:€\d+(?:\.\d{2})?)|(?:\d+\.\d{2})|(?:\d+(?:\.\d{2})?€))/;
+var priceRegex = /((?:€\d+(?:(?:\.|,)\d{1,2})?)|(?:\b\d+(?:\.|,)\d{2}\b)|(?:\d+(?:(?:\.|,)\d{1,2})?€))/g;
 
 function capitalize(s) {
     // returns the first letter capitalized + the string from index 1 and out aka. the rest of the string
@@ -57,9 +58,10 @@ function basicPriceParsing(post) {
     var result = messages.join('. ');
     if (result.length > 0) {
         result += ' - _<https://facebook.com/' + post.id + '|Source>_';
+        return new Promise.resolve(result);
     }
 
-    return result;
+    return undefined;
 }
 
 //
@@ -85,7 +87,7 @@ const kukeke = new FacebookSource('rooster', 'Kukeke', 'kukekene', {parser: basi
 const allen = new FacebookSource('boy', 'Foody Allen', 'foodyallenrestoran', {parser: basicPriceParsing});
 
 // Trühvel, special because only posts once a week (on Mondays)
-const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {parser: function(post, context) {
+const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {parser: function (post, context) {
     var lines = post.message.split('\n').map(function(l) {
         return l.trim();
     });
@@ -96,10 +98,11 @@ const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {pa
     }
 
     var startIdx = 0;
-    var days = ["ESMASPÄEV", "TEISIPÄEV", "KOLMAPÄEV", "NELJAPÄEV", "REEDE"];
+    const days = ["ESMASPÄEV", "TEISIPÄEV", "KOLMAPÄEV", "NELJAPÄEV", "REEDE"];
     var currentDay = days[day - 1];
     var boundary = days.concat(["RESTORAN TRÜHVEL"]);
 
+    // Look for textual posts
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
         if (boundary.indexOf(line) != -1 || i == lines.length - 1) {
@@ -108,21 +111,33 @@ const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {pa
             });
 
             if (chunk[0] == currentDay) {
-                return chunk.slice(1).join('. ') + ' - _<https://facebook.com/' + post.id + '|Source>_';
+                return new Promise.resolve(chunk.slice(1).join('. ') + ' - _<https://facebook.com/' + post.id + '|Source>_');
             }
 
             startIdx = i;
         }
     }
 
+    // Didn't find any, try to find image based ones (that still contain some keywords in the textual part)
+    const keywords = ["pakkumine", "nädala", "lõuna"];
+    if (post.message.containsAny(keywords)) {
+        // Grab additional details
+        return this.fetchPostPhotos(post).then(function(photo) {
+            return {
+                text: post.message + ' - _<https://facebook.com/' + post.id + '|Source>_',
+                image: photo
+            };
+        });
+    }
+
     return undefined;
-}, filter: function(post, context) {
+}, filter: function (post, context) {
     var day = context.date.getDay(),
     diff = context.date.getDate() - day + (day == 0 ? -6 : 1);
 
     var comparison = new Date(context.date.setDate(diff));
     var base = new Date(post.created_time);
-    return comparison.toDateString() == base.toDateString();
+    return new Promise.resolve(comparison.toDateString() == base.toDateString());
 }
 });
 
