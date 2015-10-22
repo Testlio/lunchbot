@@ -1,7 +1,8 @@
 {
     "slack": {
         "api": "default_api_key",
-        "name": "LunchBot"
+        "name": "LunchBot",
+        "usesReactionVoting": true
     },
     "facebook": {
         "appID": "default_app_id",

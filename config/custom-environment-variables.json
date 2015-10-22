@@ -1,7 +1,8 @@
 {
     "slack": {
         "api": "BOT_SLACK_API_KEY",
-        "name": "BOT_SLACK_NAME"
+        "name": "BOT_SLACK_NAME",
+        "usesReactionVoting": "BOT_SLACK_REACTION_VOTING"
     },
     "facebook": {
         "appID": "BOT_FB_APP_ID",

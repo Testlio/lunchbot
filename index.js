@@ -15,7 +15,8 @@ process.on('uncaughtException', function(err) {
 
 var bot = new LunchBot({
     token: token,
-    name: name
+    name: name,
+    usesReactionVoting: config.get('slack.usesReactionVoting')
 });
 
 //
