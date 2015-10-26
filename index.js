@@ -98,36 +98,40 @@ const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {pa
         return undefined;
     }
 
+    const lowerCaseMessage = post.message.toLowerCase();
+
     var startIdx = 0;
-    const days = ["ESMASPÄEV", "TEISIPÄEV", "KOLMAPÄEV", "NELJAPÄEV", "REEDE"];
+    const days = ["esmaspäev", "teisipäev", "kolmapäev", "neljapäev", "reede"];
     var currentDay = days[day - 1];
-    var boundary = days.concat(["RESTORAN TRÜHVEL"]);
+    var boundary = days.concat(["restoran trühvel"]);
 
     // Look for textual posts
-    for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
-        if (boundary.indexOf(line) != -1 || i == lines.length - 1) {
-            var chunk = lines.slice(startIdx, i).filter(function(e) {
-                return e.length > 0;
-            });
+    if (lowerCaseMessage.containsAny(days)) {
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (boundary.indexOf(line.toLowerCase()) != -1 || i == lines.length - 1) {
+                var chunk = lines.slice(startIdx, i).filter(function(e) {
+                    return e.length > 0;
+                });
 
-            if (chunk[0] == currentDay) {
-                return new Promise.resolve(chunk.slice(1).join('. ') + ' - _<https://facebook.com/' + post.id + '|Source>_');
+                if (chunk[0].toLowerCase() == currentDay) {
+                    return new Promise.resolve(chunk.slice(1).join('. ') + ' - _<https://facebook.com/' + post.id + '|Source>_');
+                }
+
+                startIdx = i;
             }
-
-            startIdx = i;
         }
     }
 
     // Didn't find any, try to find image based ones (that still contain some keywords in the textual part)
-    const keywords = ["pakkumine", "nädala", "lõuna"];
-    if (post.message.containsAny(keywords)) {
+    const keywords = ["selle nädala", "lõunamenüü", "nädala pakkumised"];
+    if (lowerCaseMessage.containsAny(keywords)) {
         // Grab additional details
         return this.fetchPostPhotos(post).then(function(photo) {
-            return {
+            return new Promise.resolve({
                 text: post.message + ' - _<https://facebook.com/' + post.id + '|Source>_',
                 image: photo
-            };
+            });
         });
     }
 
@@ -138,6 +142,7 @@ const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {pa
 
     var comparison = new Date(context.date.setDate(diff));
     var base = new Date(post.created_time);
+
     return new Promise.resolve(comparison.toDateString() == base.toDateString());
 }
 });
