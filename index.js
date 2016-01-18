@@ -147,5 +147,10 @@ const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', {pa
 }
 });
 
-bot.services = [latabla, kpk, apelsin, fhoone, truhvel, kukeke, allen];
+const services = [latabla, kpk, apelsin, fhoone, truhvel, kukeke, allen];
+console.log('Starting LunchBot with services', services);
+
+bot.services = services;
 bot.run();
+
+console.log('LunchBot is up and running');
