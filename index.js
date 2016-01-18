@@ -12,7 +12,11 @@ var token = config.get('slack.api');
 var name = config.get('slack.name');
 
 process.on('uncaughtException', function(err) {
-  console.log(err);
+    console.log(err);
+});
+
+process.on('exit', function() {
+    console.log('Process exiting');
 });
 
 var bot = new LunchBot({
@@ -21,35 +25,38 @@ var bot = new LunchBot({
     usesReactionVoting: config.get('slack.usesReactionVoting')
 });
 
+var params = {
+    parsers: [Parsers.weeklyMenu, Parsers.basicPrice],
+    filters: [Filters.weekday]
+};
+
 //
 //  Sources
 //
 
 // La Tabla
-const latabla = new FacebookSource('es', 'La Tabla', "827767180609816", { parser: Parsers.weeklyMenu, filters: Filters.weekday });
+const latabla = new FacebookSource('es', 'La Tabla', "827767180609816", params);
 
 // KPK
-const kpk = new FacebookSource('scissors', 'Kivi Paber Käärid', 'kivipaberkaarid', { parser: Parsers.basicPrice });
+const kpk = new FacebookSource('scissors', 'Kivi Paber Käärid', 'kivipaberkaarid', params);
 
 // Apelsini Raudtee
-const apelsin = new FacebookSource('tangerine', 'Apelsini Raudtee', 'apelsiniraudtee', { parser: Parsers.basicPrice });
+const apelsin = new FacebookSource('tangerine', 'Apelsini Raudtee', 'apelsiniraudtee', params);
 
 // F-Hoone
-const fhoone = new FacebookSource('house', 'F-Hoone', 'Fhoone', { parser: Parsers.basicPrice });
+const fhoone = new FacebookSource('house', 'F-Hoone', 'Fhoone', params);
 
 // Kukeke, occassionally has an offer posted
-const kukeke = new FacebookSource('rooster', 'Kukeke', 'kukekene', { parser: Parsers.basicPrice });
+const kukeke = new FacebookSource('rooster', 'Kukeke', 'kukekene', params);
 
 // Foody Allen, sometimes posts
-const allen = new FacebookSource('boy', 'Foody Allen', 'foodyallenrestoran', { parser: Parsers.basicPrice });
+const allen = new FacebookSource('boy', 'Foody Allen', 'foodyallenrestoran', params);
 
 // Trühvel, special because only posts once a week (on Mondays)
-const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', { parser: Parsers.weeklyMenu, filter: Filters.weekday });
+const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', params);
 
 const services = [latabla, kpk, apelsin, fhoone, truhvel, kukeke, allen];
-console.log('Starting LunchBot with services', services);
+console.log('Starting LunchBot with ' + services.length + ' services');
 
 bot.services = services;
 bot.run();
-
-console.log('LunchBot is up and running');
