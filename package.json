@@ -14,6 +14,7 @@
     "config": "^1.16.0",
     "datejs": "0.0.2",
     "facebook-node-sdk": "^0.2.0",
+    "lodash": "^4.0.0",
     "sentence-tokenizer": "0.0.7",
     "slackbots": "^0.4.0"
   }
