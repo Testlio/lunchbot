@@ -26,8 +26,16 @@ var bot = new LunchBot({
 });
 
 var params = {
-    parsers: [Parsers.weeklyMenu, Parsers.basicPrice],
-    filters: [Filters.weekday]
+    chains: [
+        {
+            parser: Parsers.weeklyMenu,
+            filter: Filters.startOfWeek
+        },
+        {
+            parser: Parsers.basicPrice,
+            filter: Filters.sameDay
+        }
+    ]
 };
 
 //
