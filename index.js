@@ -64,7 +64,7 @@ const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', par
 const buddies = new FacebookSource('two_men_holding_hands', 'Kohvik Sõbrad', 'kohviksobrad', params);
 
 // Frenchy
-const frenchy = new FacebookSource('fr', 'Frenchy', 'Frenchy-593232130762873', params);
+const frenchy = new FacebookSource('fr', 'Frenchy', '593232130762873', params);
 
 // Sesoon
 const sesoon = new FacebookSource('eggplant', 'Kohvik Sesoon', 'KohvikSesoon', params);
