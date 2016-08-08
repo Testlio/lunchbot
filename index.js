@@ -2,6 +2,7 @@
 
 var LunchBot = require('./lib/lunchbot');
 var FacebookSource = require('./lib/sources/facebook');
+var luncherSource = require('./lib/sources/luncher');
 var Parsers = require('./lib/parsers');
 var Filters = require('./lib/filters');
 
@@ -69,7 +70,15 @@ const frenchy = new FacebookSource('fr', 'Frenchy', '593232130762873', params);
 // Sesoon
 const sesoon = new FacebookSource('eggplant', 'Kohvik Sesoon', 'KohvikSesoon', params);
 
-const services = [latabla, kpk, apelsin, fhoone, truhvel, kukeke, buddies, frenchy, sesoon];
+const luncherServices = [
+    ['steam_locomotive', 'Perrooni Kohvik', '5795c85ec7e7ff48390001eb'],
+    ['tea', 'Telliskivi Reval Café', '575ea00fc7e7ff483900004b'],
+    ['poultry_leg', 'Telliskivi 15', '5761148ec7e7ff4839000081']
+].map(function(service) {
+    return luncherSource.apply(null, service);
+});
+
+const services = [latabla, kpk, apelsin, fhoone, truhvel, kukeke, buddies, frenchy, sesoon].concat(luncherServices);
 console.log('Starting LunchBot with ' + services.length + ' services');
 
 bot.services = services;
