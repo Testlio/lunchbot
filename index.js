@@ -60,7 +60,16 @@ const kukeke = new FacebookSource('rooster', 'Kukeke', 'kukekene', params);
 // Trühvel, special because only posts once a week (on Mondays)
 const truhvel = new FacebookSource('coffee', 'Trühvel', '1829502837275034', params);
 
-const services = [latabla, kpk, apelsin, fhoone, truhvel, kukeke];
+// Kohvik Sõbrad
+const buddies = new FacebookSource('two_men_holding_hands', 'Kohvik Sõbrad', 'kohviksobrad', params);
+
+// Frenchy
+const frenchy = new FacebookSource('fr', 'Frenchy', 'Frenchy-593232130762873', params);
+
+// Sesoon
+const sesoon = new FacebookSource('eggplant', 'Kohvik Sesoon', 'KohvikSesoon', params);
+
+const services = [latabla, kpk, apelsin, fhoone, truhvel, kukeke, buddies, frenchy, sesoon];
 console.log('Starting LunchBot with ' + services.length + ' services');
 
 bot.services = services;
